@@ -23,7 +23,8 @@ jobs:
             then
               echo "Deploying to BETA..."
               cd ${{ secrets.WEBSITE_BETA_PATH }} \
-              && git pull origin beta \
+              && git fetch origin \
+              && git reset --hard origin/beta \
               && cd website \
               && npm install \
               && npm run build \
@@ -34,8 +35,14 @@ jobs:
             elif [ "${{ github.ref }}" = "refs/heads/main" ];
             then
               echo "Deploying to MAIN..."
-              cd ${{ secrets.WEBSITE_PATH }} && git pull origin main && cd website && npm install && npm run build && echo "[OK] Pull succesfully into MAIN directory" \
-               || { echo "[ERROR] Pulling into MAIN directory failed!"; exit 1; }
+              cd ${{ secrets.WEBSITE_PATH }} \
+              && git fetch origin \
+              && git reset --hard origin/main \
+              && cd website \
+              && npm install \
+              && npm run build \
+              && echo "[OK] Pull succesfully into MAIN directory" \
+              || { echo "[ERROR] Pulling into MAIN directory failed!"; exit 1; }
             fi
 
             # nginx
