@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main 
+      - beta
 
 jobs:
   deploy:
@@ -17,16 +18,24 @@ jobs:
           script: |
             echo "Succesfully connected to Azure!"
 
-            # pulling code from GitHub into the main folder
-            echo "[PULL] Moving to root directory..."
-            cd ${{ secrets.SERVER_PATH }} && git pull origin main && echo "[OK] Pulling succesfully executed!" || { echo "[ERROR] Pulling failed!"; exit 1; }
-
-            # building the website for production use
-            cd ${{ secrets.WEBSITE_PATH }} && npm install && npm run build && echo "[OK] Building succesfully executed!" || { echo "[ERROR] Building failed..."; exit 1; }
+            # update BETA directory
+            if [ "${{ github.ref }}" = "refs/heads/beta" ]; 
+            then
+              echo "Deploying to BETA..."
+              cd ${{ secrets.WEBSITE_BETA_PATH }} && git pull origin beta && cd website && npm install && npm run build && echo "[OK] Pull succesfully into BETA directory" \
+               || { echo "[ERROR] Pulling into BETA directory failed!"; exit 1; }
+            
+            # update MAIN directory
+            elif [ "${{ github.ref }}" = "refs/heads/main" ];
+            then
+              echo "Deploying to MAIN..."
+              cd ${{ secrets.WEBSITE_PATH }} && git pull origin main && cd website && npm install && npm run build && echo "[OK] Pull succesfully into MAIN directory" \
+               || { echo "[ERROR] Pulling into MAIN directory failed!"; exit 1; }
+            fi
 
             # nginx
             echo "[NGINX] Reloading..."
-            sudo service nginx reload && echo "Deployment successful on Azure!" || { echo "Deployment failed!"; exit 1; }
+            sudo systemctl reload nginx && echo "Deployment successful on Azure!" || { echo "Deployment failed!"; exit 1; }
 
 
 
