@@ -22,8 +22,13 @@ jobs:
             if [ "${{ github.ref }}" = "refs/heads/beta" ]; 
             then
               echo "Deploying to BETA..."
-              cd ${{ secrets.WEBSITE_BETA_PATH }} && git pull origin beta && cd website && npm install && npm run build && echo "[OK] Pull succesfully into BETA directory" \
-               || { echo "[ERROR] Pulling into BETA directory failed!"; exit 1; }
+              cd ${{ secrets.WEBSITE_BETA_PATH }} \
+              && git pull origin beta \
+              && cd website \
+              && npm install \
+              && npm run build \
+              && echo "[OK] Pull succesfully into BETA directory" \
+              || { echo "[ERROR] Pulling into BETA directory failed!"; exit 1; }
             
             # update MAIN directory
             elif [ "${{ github.ref }}" = "refs/heads/main" ];
