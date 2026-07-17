@@ -20,7 +20,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  opacity: 0.55;
+  opacity: 0.45;
   animation: float 14s ease-in-out infinite;
 }
 
@@ -72,6 +72,10 @@
   padding: 32px 20px;
 }
 
+.form-screen {
+  padding-top: max(72px, calc(env(safe-area-inset-top) + 56px));
+}
+
 .brand {
   margin: 0 0 48px;
   font-size: 15px;
@@ -96,24 +100,26 @@
   border-radius: 999px;
   cursor: pointer;
   overflow: hidden;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
   color: var(--text-strong);
   font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.02em;
   background:
     linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 45%,
-      rgba(255, 255, 255, 0.14) 100%
+      155deg,
+      rgba(90, 140, 220, 0.14) 0%,
+      rgba(255, 255, 255, 0.04) 42%,
+      rgba(60, 100, 180, 0.1) 100%
     );
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 var(--glass-highlight),
-    inset 0 -8px 24px rgba(255, 255, 255, 0.06),
-    0 12px 40px rgba(0, 0, 0, 0.22);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 10px 36px rgba(0, 0, 0, 0.28);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .water-btn::before {
@@ -122,49 +128,37 @@
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    circle 80px at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(255, 255, 255, 0.08) 35%,
-    transparent 70%
+    circle 90px at var(--mx, 50%) var(--my, 50%),
+    rgba(120, 200, 255, 0.22) 0%,
+    rgba(80, 140, 220, 0.08) 40%,
+    transparent 72%
   );
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-.water-btn:hover::before {
+.water-btn.is-active::before {
   opacity: 1;
 }
 
-.water-btn:hover {
-  transform: translateY(-2px) scale(1.01);
+.water-btn.is-active {
+  transform: translateY(-1px);
+  border-color: rgba(160, 210, 255, 0.22);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -12px 28px rgba(120, 200, 255, 0.12),
-    0 18px 48px rgba(0, 0, 0, 0.28);
+    inset 0 0 0 0.5px rgba(160, 210, 255, 0.12),
+    0 14px 40px rgba(0, 0, 0, 0.32);
 }
 
 .water-btn:active {
-  transform: translateY(0) scale(0.99);
-}
-
-.water-btn__shine {
-  position: absolute;
-  inset: 1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.42) 0%,
-    transparent 38%
-  );
-  pointer-events: none;
+  transform: translateY(0) scale(0.985);
 }
 
 .water-btn__canvas {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  mix-blend-mode: screen;
+  mix-blend-mode: plus-lighter;
 }
 
 .water-btn__label {
@@ -172,17 +166,50 @@
   z-index: 1;
 }
 
+.ios-back {
+  position: absolute;
+  top: max(20px, env(safe-area-inset-top, 20px));
+  left: max(20px, env(safe-area-inset-left, 20px));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-strong);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-back svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 1px;
+}
+
+.ios-back:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .glass-panel {
   width: min(420px, 100%);
   padding: 36px 32px 32px;
   border-radius: 28px;
   border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(32px) saturate(160%);
-  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(36px) saturate(140%);
+  -webkit-backdrop-filter: blur(36px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 var(--glass-highlight),
-    0 24px 64px rgba(0, 0, 0, 0.35);
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    0 20px 56px rgba(0, 0, 0, 0.34);
   text-align: left;
 }
 
@@ -197,21 +224,6 @@
 .glass-subtitle {
   margin: 0 0 28px;
   color: var(--text);
-}
-
-.glass-back {
-  margin-bottom: 24px;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.2s ease;
-}
-
-.glass-back:hover {
-  color: var(--text-strong);
 }
 
 .glass-form {
@@ -231,20 +243,20 @@
 .glass-form input {
   padding: 14px 16px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
   color: var(--text-strong);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .glass-form input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.28);
 }
 
 .glass-form input:focus {
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 0 0 4px rgba(120, 200, 255, 0.15);
+  border-color: rgba(120, 180, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(80, 140, 220, 0.14);
 }
 
 .glass-form .water-btn {

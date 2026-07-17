@@ -70,7 +70,7 @@ function WaterButton({ children, onClick }) {
 
           ctx.beginPath()
           ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(200, 230, 255, ${ripple.opacity})`
+          ctx.fillStyle = `rgba(100, 190, 255, ${ripple.opacity})`
           ctx.fill()
           return true
         }
@@ -82,13 +82,13 @@ function WaterButton({ children, onClick }) {
 
         ctx.beginPath()
         ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(210, 240, 255, ${ripple.opacity})`
+        ctx.strokeStyle = `rgba(120, 200, 255, ${ripple.opacity})`
         ctx.lineWidth = ripple.lineWidth
         ctx.stroke()
 
         ctx.beginPath()
         ctx.arc(ripple.x, ripple.y, ripple.radius * 0.65, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(255, 255, 255, ${ripple.opacity * 0.35})`
+        ctx.strokeStyle = `rgba(80, 160, 230, ${ripple.opacity * 0.4})`
         ctx.lineWidth = 1
         ctx.stroke()
 
@@ -106,26 +106,64 @@ function WaterButton({ children, onClick }) {
       }
     }
 
-    function handleMove(event) {
-      const { x, y } = localPoint(event)
+    function setGlow(x, y) {
       button.style.setProperty('--mx', `${x}px`)
       button.style.setProperty('--my', `${y}px`)
+    }
+
+    function clearGlow() {
+      button.classList.remove('is-active')
+      button.style.removeProperty('--mx')
+      button.style.removeProperty('--my')
+    }
+
+    function handlePointerDown(event) {
+      button.setPointerCapture(event.pointerId)
+      button.classList.add('is-active')
+      const { x, y } = localPoint(event)
+      setGlow(x, y)
+      addRipple(x, y, 1.2)
+    }
+
+    function handlePointerMove(event) {
+      const { x, y } = localPoint(event)
+      setGlow(x, y)
+      button.classList.add('is-active')
 
       const now = performance.now()
       if (now - lastRippleRef.current > 45) {
-        addRipple(x, y, 0.7)
+        addRipple(x, y, 0.75)
         lastRippleRef.current = now
       }
     }
 
-    function handleEnter(event) {
-      const { x, y } = localPoint(event)
-      addRipple(x, y, 1.2)
+    function handlePointerEnter(event) {
+      if (event.pointerType === 'mouse') {
+        button.classList.add('is-active')
+        const { x, y } = localPoint(event)
+        setGlow(x, y)
+        addRipple(x, y, 1)
+      }
     }
 
-    function handleLeave() {
-      button.style.removeProperty('--mx')
-      button.style.removeProperty('--my')
+    function handlePointerLeave(event) {
+      if (event.pointerType === 'mouse') {
+        clearGlow()
+      }
+    }
+
+    function handlePointerUp(event) {
+      if (button.hasPointerCapture(event.pointerId)) {
+        button.releasePointerCapture(event.pointerId)
+      }
+      clearGlow()
+    }
+
+    function handlePointerCancel(event) {
+      if (button.hasPointerCapture(event.pointerId)) {
+        button.releasePointerCapture(event.pointerId)
+      }
+      clearGlow()
     }
 
     resize()
@@ -133,15 +171,21 @@ function WaterButton({ children, onClick }) {
 
     const observer = new ResizeObserver(resize)
     observer.observe(button)
-    button.addEventListener('mousemove', handleMove)
-    button.addEventListener('mouseenter', handleEnter)
-    button.addEventListener('mouseleave', handleLeave)
+    button.addEventListener('pointerdown', handlePointerDown)
+    button.addEventListener('pointermove', handlePointerMove)
+    button.addEventListener('pointerenter', handlePointerEnter)
+    button.addEventListener('pointerleave', handlePointerLeave)
+    button.addEventListener('pointerup', handlePointerUp)
+    button.addEventListener('pointercancel', handlePointerCancel)
 
     return () => {
       observer.disconnect()
-      button.removeEventListener('mousemove', handleMove)
-      button.removeEventListener('mouseenter', handleEnter)
-      button.removeEventListener('mouseleave', handleLeave)
+      button.removeEventListener('pointerdown', handlePointerDown)
+      button.removeEventListener('pointermove', handlePointerMove)
+      button.removeEventListener('pointerenter', handlePointerEnter)
+      button.removeEventListener('pointerleave', handlePointerLeave)
+      button.removeEventListener('pointerup', handlePointerUp)
+      button.removeEventListener('pointercancel', handlePointerCancel)
       cancelAnimationFrame(frameRef.current)
     }
   }, [])
@@ -153,19 +197,37 @@ function WaterButton({ children, onClick }) {
       className="water-btn"
       onClick={onClick}
     >
-      <span className="water-btn__shine" aria-hidden="true" />
       <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
       <span className="water-btn__label">{children}</span>
     </button>
   )
 }
 
-function GlassPanel({ title, subtitle, children, onBack }) {
+function BackButton({ onClick }) {
+  return (
+    <button
+      type="button"
+      className="ios-back"
+      onClick={onClick}
+      aria-label="Back"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M14.5 5.5L8 12l6.5 6.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
+  )
+}
+
+function GlassPanel({ title, subtitle, children }) {
   return (
     <div className="glass-panel">
-      <button type="button" className="glass-back" onClick={onBack}>
-        ← Back
-      </button>
       <h1>{title}</h1>
       {subtitle && <p className="glass-subtitle">{subtitle}</p>}
       {children}
@@ -198,11 +260,8 @@ function App() {
 
       {view === 'login' && (
         <main className="form-screen">
-          <GlassPanel
-            title="Login"
-            subtitle="Welcome back."
-            onBack={() => setView('home')}
-          >
+          <BackButton onClick={() => setView('home')} />
+          <GlassPanel title="Login" subtitle="Welcome back.">
             <form className="glass-form" onSubmit={(e) => e.preventDefault()}>
               <label>
                 Username
@@ -224,10 +283,10 @@ function App() {
 
       {view === 'signup' && (
         <main className="form-screen">
+          <BackButton onClick={() => setView('home')} />
           <GlassPanel
             title="Create Account"
             subtitle="Pick a username and password."
-            onBack={() => setView('home')}
           >
             <form className="glass-form" onSubmit={(e) => e.preventDefault()}>
               <label>

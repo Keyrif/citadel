@@ -1,9 +1,8 @@
 :root {
   --text: rgba(255, 255, 255, 0.72);
   --text-strong: rgba(255, 255, 255, 0.95);
-  --glass-bg: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-highlight: rgba(255, 255, 255, 0.55);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.14);
   --sans: 'SF Pro Display', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   font-family: var(--sans);
