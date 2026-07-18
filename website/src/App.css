@@ -95,11 +95,11 @@
 
 .brand {
   margin: 0 0 48px;
-  font-size: 15px;
+  font-size: 26px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--text);
-  min-height: 24px; 
+  min-height: 38px; 
 }
 
 .typewriter-cursor {
