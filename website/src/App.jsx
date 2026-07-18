@@ -15,7 +15,7 @@ function TypewriterBrand() {
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(150);
 
-  const phrases = ['sCITADEL', 'BUILT BY KEYRIF'];
+  const phrases = ['CITADEL', 'BUILT BY KEYRIF'];
 
   useEffect(() => {
     const timer = setTimeout(() => {
