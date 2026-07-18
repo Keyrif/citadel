@@ -18,7 +18,7 @@ export const PANEL_CONFIG = {
 export const TIMING = {
   press: 250,
   ripple: 100,
-  expand: 400,
+  expand: 180,
 }
 
 export function useWaterSurface(ref) {

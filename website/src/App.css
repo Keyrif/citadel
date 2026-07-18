@@ -191,12 +191,12 @@
 .fluid-surface.phase-closing {
   will-change: left, top, width, height, border-radius;
   transition:
-    left 400ms cubic-bezier(0.25, 1, 0.35, 1),
-    top 400ms cubic-bezier(0.25, 1, 0.35, 1),
-    width 400ms cubic-bezier(0.25, 1, 0.35, 1),
-    height 400ms cubic-bezier(0.25, 1, 0.35, 1),
-    border-radius 400ms cubic-bezier(0.25, 1, 0.35, 1),
-    box-shadow 400ms cubic-bezier(0.25, 1, 0.35, 1);
+    left 180ms cubic-bezier(0.25, 1, 0.35, 1),
+    top 180ms cubic-bezier(0.25, 1, 0.35, 1),
+    width 180ms cubic-bezier(0.25, 1, 0.35, 1),
+    height 180ms cubic-bezier(0.25, 1, 0.35, 1),
+    border-radius 150ms cubic-bezier(0.25, 1, 0.35, 1),
+    box-shadow 180ms cubic-bezier(0.25, 1, 0.35, 1);
 }
 
 .fluid-surface::before {
@@ -267,8 +267,8 @@
   opacity: 0;
   transform: scale(0.96);
   transition:
-    opacity 250ms ease 80ms,
-    transform 300ms cubic-bezier(0.25, 1, 0.35, 1) 40ms;
+    opacity 180ms ease 40ms,
+    transform 220ms cubic-bezier(0.25, 1, 0.35, 1) 20ms;
   pointer-events: none;
 }
 
@@ -388,9 +388,9 @@
   transform: translateY(0);
 }
 
-.glass-form.is-visible label:nth-child(3) { transition-delay: 40ms; }
-.glass-form.is-visible label:nth-child(4) { transition-delay: 80ms; }
-.glass-form.is-visible .water-btn { transition-delay: 120ms; }
+.glass-form.is-visible label:nth-child(3) { transition-delay: 20; }
+.glass-form.is-visible label:nth-child(4) { transition-delay: 40ms; }
+.glass-form.is-visible .water-btn { transition-delay: 60ms; }
 
 .glass-form input {
   padding: 14px 16px;
