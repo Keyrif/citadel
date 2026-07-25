@@ -9,12 +9,14 @@ export const PANEL_CONFIG = {
     title: 'Login',
     subtitle: 'Welcome back.',
     submit: 'Sign in',
+    endpoint: '/login',
   },
   signup: {
     label: 'Create Account',
     title: 'Create Account',
     subtitle: 'Pick a username and password.',
     submit: 'Create account',
+    endpoint: '/register',
   },
 }
 
@@ -57,29 +59,26 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
       password: formData.get("password")
     };
 
-    if (config.label === 'Create Account') {
-      try {
-        const response = await fetch("/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
 
-        const data = await response.json();
+    try {
+      const response = await fetch(config.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-        if (response.ok) {
-          alert("Account created successfully!");
-        } else {
-          const errorMsg = Array.isArray(data.detail) 
-            ? data.detail.map(err => err.msg).join(", ") 
-            : data.detail;
-          setErrorMessage(errorMsg);
-        }
-      } catch (error) {
-        setErrorMessage("Could not connect to API.");
+      const data = await response.json();
+
+      if (response.ok) {
+        setErrorMessage(data.message || `${config.label} successful!`); 
+      } else {
+        const errorMsg = Array.isArray(data.detail) 
+          ? data.detail.map(err => err.msg).join(", ") 
+          : data.detail;
+        setErrorMessage(errorMsg);
       }
-    } else {
-      console.log("Login endpoint not connected yet!");
+    } catch (error) {
+      setErrorMessage("Could not connect to API.");
     }
   };
 

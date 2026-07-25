@@ -3,6 +3,8 @@ from pydantic import BaseModel, Field
 import oracledb, os
 oracledb.init_oracle_client()
 app = FastAPI()
+dsn_oracle = oracledb.makedsn("127.0.0.1", 1521, sid="xe")
+
 
 class UserRegistration(BaseModel):
     username: str
@@ -11,8 +13,6 @@ class UserRegistration(BaseModel):
 @app.post("/register")
 def register(user: UserRegistration):
     try:
-        dsn_oracle = oracledb.makedsn("127.0.0.1", 1521, sid="xe")
-
         connection = oracledb.connect(
             user="citadel",
             password=os.getenv("DB_PASSWORD"),
@@ -31,8 +31,41 @@ def register(user: UserRegistration):
     except Exception as e:
         error_string = str(e)
 
-        # account already exists
+        # [ERROR MESSAGE] Account already exists
         if "ORA-00001" in error_string:
             raise HTTPException(status_code=400, detail="This username is already taken!")
+        # [ERROR MESSAGE] default
         raise HTTPException(status_code=500, detail="An internal server error occured!")
 
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+@app.post("/login")
+def login(user: UserLogin):
+    try:
+        connection = oracledb.connect(
+            user="citadel",
+            password=os.getenv("DB_PASSWORD"),
+            dsn=dsn_oracle
+        )
+
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "SELECT COUNT(*) FROM accounts WHERE USERNAME = :username AND PASSWD = :password",
+            [user.username, user.password]
+        )
+        count = cursor.fetchone()[0]
+
+        cursor.close()
+        connection.close()
+
+        if count == 0:
+            raise HTTPException(status_code=400, detail="Password incorrect or username not found!")
+
+        return {"message": "Logged in successfully!"}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="An internal server error occurred!")
