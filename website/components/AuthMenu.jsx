@@ -411,7 +411,7 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
         <input 
           type="password" 
           name="password" 
-          minLength="8" 
+          minLength="6" 
           autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} 
           required 
         />

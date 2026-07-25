@@ -6,7 +6,7 @@ app = FastAPI()
 
 class UserRegistration(BaseModel):
     username: str
-    password: str = Field(..., minimum_length=8)
+    password: str = Field(..., minimum_length=6)
 
 @app.post("/register")
 def register(user: UserRegistration):
