@@ -520,10 +520,11 @@
   transform: scale(1.5);
 }
 
+
 .error-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(30, 40, 80, 0.4);
+  background-color: rgba(0, 0, 0, 0.65);
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
@@ -539,23 +540,16 @@
 
 .error-popup-surface::before {
   content: '';
-  display: block;
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  
-  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  
+  -webkit-backdrop-filter: blur(12px);
   background-color: rgba(30, 40, 80, 0.4);
-  pointer-events: none;
+  z-index: -1;
 }
 
-.glass-form {
-  position: relative;
-  z-index: 10;
-}
-
+/* Text Overrides */
 .glass-form h1.error-title {
   color: #ff6b6b;
   margin-bottom: 8px;
