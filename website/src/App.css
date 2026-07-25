@@ -536,7 +536,6 @@
 .error-popup-surface {
   z-index: 9999;
 }
-
 .error-popup-surface::before {
   content: '';
   display: block;
