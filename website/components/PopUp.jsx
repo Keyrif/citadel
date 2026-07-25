@@ -101,7 +101,7 @@ export function PopUp({ popUpmessage, setPopUpMessage }) {
                 {popUpMessageType === 'success' ? 'SUCCESS' : 'ERROR'}
               </h1>
               
-              <p className={`glass-subtitle ${messageType === 'success' ? "success-subtitle" : "error-subtitle"}`}>
+              <p className={`glass-subtitle ${popUpMessageType === 'success' ? "success-subtitle" : "error-subtitle"}`}>
                 {popUpMessageText}
               </p>
               
