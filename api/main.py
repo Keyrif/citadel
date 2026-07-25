@@ -26,7 +26,7 @@ def register(user: UserRegistration):
         cursor.close()
         connection.close()
 
-        return {"status": "succes"}
+        return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
