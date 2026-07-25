@@ -267,7 +267,7 @@ function AuthForm({ config, showFields }) {
 
     if (config.label === 'Create Account') {
       try {
-        const response = await fetch("https://keyrif.me:8000/register", {
+        const response = await fetch("https://beta.keyrif.me:8000/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
