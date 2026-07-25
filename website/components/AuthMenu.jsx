@@ -47,7 +47,7 @@ export function wait(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms))
 }
 
-function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
+function AuthForm({ config, showFields, popUpMessage, setPopUpMessage, setLoggedInUser }) {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +79,6 @@ function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
             setLoggedInUser(data.userData);
           }, 1500);
         }
-      }
       } else {
         const errorMsg = Array.isArray(data.detail) 
           ? data.detail.map(err => err.msg).join(", ") 
@@ -116,7 +115,7 @@ function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
     </form>
   )
 }
-function FluidSurface({ panel, bounds, onBack, showForm, popUpMessage, setPopUpMessage }) {
+function FluidSurface({ panel, bounds, onBack, showForm, popUpMessage, setPopUpMessage, setLoggedInUser }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
   const config = PANEL_CONFIG[panel.type]
@@ -157,7 +156,8 @@ function FluidSurface({ panel, bounds, onBack, showForm, popUpMessage, setPopUpM
               config={config} 
               showFields={panel.phase === 'open'} 
               popUpMessage={popUpMessage}      
-              setPopUpMessage={setPopUpMessage}  
+              setPopUpMessage={setPopUpMessage} 
+              setLoggedInUser={setLoggedInUser} 
             />
           </div>
         )}
@@ -176,7 +176,7 @@ function MeasurePanel({ type, measureRef }) {
   )
 }
 
-export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpMessage, setPopUpMessage }) {
+export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpMessage, setPopUpMessage, setLoggedInUser }) {
   if (!panel) return null;
 
   return (
@@ -193,6 +193,7 @@ export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpMes
           onBack={onBack}
           popUpMessage={popUpMessage}      
           setPopUpMessage={setPopUpMessage}  
+          setLoggedInUser={setLoggedInUser}
         />
       )}
 

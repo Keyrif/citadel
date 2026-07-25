@@ -10,7 +10,7 @@ import {
 import { 
   Button
 } from '../components/Button';
-import { Dashboard } from './Dashboard';
+import { Dashboard } from '../components/Dashboard';
 
 function TypewriterBrand() {
   const [text, setText] = useState('');
