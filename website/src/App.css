@@ -523,7 +523,7 @@
 .error-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(30, 40, 80, 0.4);
+  background-color: transparent;
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
