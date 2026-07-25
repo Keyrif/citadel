@@ -520,14 +520,10 @@
   transform: scale(1.5);
 }
 
-/* --- ERROR POPUP STYLES --- */
-
-/* Dark overlay behind the popup */
-/* Invisible overlay behind the popup to handle click-to-close */
 .error-overlay {
   position: fixed;
   inset: 0;
-  background-color: transparent; /* Changed from rgba(0, 0, 0, 0.65) */
+  background-color: rgba(0, 0, 0, 0.65);
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
@@ -537,12 +533,10 @@
   opacity: 0;
 }
 
-/* Base surface overrides */
 .error-popup-surface {
   z-index: 9999;
 }
 
-/* Pseudo-element to bypass nested backdrop-filter bug */
 .error-popup-surface::before {
   content: '';
   position: absolute;
@@ -554,7 +548,6 @@
   z-index: -1;
 }
 
-/* Text Overrides */
 .glass-form h1.error-title {
   color: #ff6b6b;
   margin-bottom: 8px;
