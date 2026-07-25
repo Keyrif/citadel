@@ -3,7 +3,7 @@ import { panelTargetRect, wait, TIMING } from './AuthMenu';
 import { useWaterSurface, Button } from './Button';
 
 export function PopUp({ popUpmessage, setPopUpMessage }) {
-  const popUpMessageText = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.text : message;
+  const popUpMessageText = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.text : popUpMessage;
   const popUpMessageType = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.type : 'error';
 
   const [phase, setPhase] = useState('closed')
