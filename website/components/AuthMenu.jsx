@@ -74,9 +74,11 @@ function AuthForm({ config, showFields, popUpMessage, setPopUpMessage, setLogged
           text: data.message || `${config.label} successful!`, 
           type: "success" 
         });
+
         if (data.userData && setLoggedInUser) {
           setTimeout(() => {
             setLoggedInUser(data.userData);
+            localStorage.setItem("citadel_session", JSON.stringify(data.userData));
           }, 1500);
         }
       } else {

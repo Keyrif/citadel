@@ -60,7 +60,10 @@ export default function App() {
   const [homeVisible, setHomeVisible] = useState(true)
   const [hiddenNav, setHiddenNav] = useState(null)
   const [popUpMessage, setPopUpMessage] = useState("")
-  const [loggedInUser, setLoggedInUser] = useState(null)
+  const [loggedInUser, setLoggedInUser] = useState(() => {
+    const savedUser = localStorage.getItem("citadel_session");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const measureRef = useRef(null)
   const busyRef = useRef(false)
 
@@ -128,6 +131,7 @@ export default function App() {
             user={loggedInUser} 
             onLogout={() => {
               setLoggedInUser(null);
+              localStorage.removeItem("citadel_session");
               closePanel();
             }} 
           />
