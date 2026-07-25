@@ -5,12 +5,10 @@ export function Dashboard({ user, onLogout }) {
   if (!user) return null;
 
   return (
-    // We removed the padding, added a fixed height, and centered it using margin
-    <div className="fluid-surface is-form phase-open" style={{ width: '420px', height: '320px', position: 'relative', margin: '0 auto' }}>
+    <div className="fluid-surface is-form phase-open" style={{ width: '420px', padding: '160px' }}>
         <div className="fluid-surface__body">
             <div className="fluid-form is-visible">
-                {/* We moved the padding here so the text doesn't hit the top edge */}
-                <div className="glass-form is-visible" style={{ textAlign: 'center', paddingTop: '60px' }}>
+                <div className="glass-form is-visible" style={{ textAlign: 'center' }}>
                 
                 <h1>Welcome, {user.username}!</h1>
                 
