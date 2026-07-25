@@ -71,7 +71,7 @@ export function PopUp({ errorMessage, setErrorMessage }) {
 
       <div
         ref={ref}
-        className={`fluid-surface error-popup-surface phase-${phase} is-form`}
+        className={`fluid-surface popup-surface phase-${phase} is-form`}
         style={bounds ? {
           left: bounds.x,
           top: bounds.y,

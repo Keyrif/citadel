@@ -533,14 +533,14 @@
   opacity: 0;
 }
 
-.error-popup-surface {
+.popup-surface {
   z-index: 9999;
   background: rgba(30, 42, 75, 0.25) !important;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
 
-.error-popup-surface::before {
+.popup-surface::before {
   content: '';
   display: block;
   position: absolute;
@@ -553,8 +553,7 @@
   background-color: rgba(30, 40, 80, 0.4);
   pointer-events: none;
 }
-
-.glass-form {
+.popup-surface .glass-form {
   position: relative;
   z-index: 10;
 }
