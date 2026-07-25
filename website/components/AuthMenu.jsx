@@ -236,14 +236,14 @@ export function BackButton({ onClick }) {
   )
 }
 
-export function WaterButton({ children, onClick, className = '', ...props }) {
+export function WaterButton({ children, onClick, className = '', type = "button", ...props }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
 
   return (
     <button
       ref={ref}
-      type="button"
+      type={type} 
       className={`water-btn ${className}`}
       onClick={onClick}
       {...props}
@@ -255,23 +255,55 @@ export function WaterButton({ children, onClick, className = '', ...props }) {
 }
 
 function AuthForm({ config, showFields }) {
+  
+  const handleAuthSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const payload = {
+      username: formData.get("username"),
+      password: formData.get("password")
+    };
+
+    if (config.label === 'Create Account') {
+      try {
+        const response = await fetch("https://keyrif.me:8000/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Account created successfully!");
+        } else {
+          alert("Failed: " + data.detail);
+        }
+      } catch (error) {
+        alert("ERROR: Could not connect to API.");
+      }
+    } else {
+      console.log("Login endpoint not connected yet!");
+    }
+  };
+
   return (
-    <form className={`glass-form ${showFields ? 'is-visible' : ''}`} onSubmit={(e) => e.preventDefault()}>
+    <form className={`glass-form ${showFields ? 'is-visible' : ''}`} onSubmit={handleAuthSubmit}>
       <h1>{config.title}</h1>
       <p className="glass-subtitle">{config.subtitle}</p>
       <label>
         Username
-        <input type="text" name="username" autoComplete="username" />
+        <input type="text" name="username" autoComplete="username" required />
       </label>
       <label>
         Password
-        <input type="password" name="password" autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} />
+        <input type="password" name="password" autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} required />
       </label>
-      <WaterButton>{config.submit}</WaterButton>
+      <WaterButton type="submit">{config.submit}</WaterButton>
     </form>
   )
 }
-
 function FluidSurface({ panel, bounds, onBack, showForm }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
