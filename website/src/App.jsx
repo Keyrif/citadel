@@ -58,14 +58,14 @@ export default function App() {
   const [bounds, setBounds] = useState(null)
   const [homeVisible, setHomeVisible] = useState(true)
   const [hiddenNav, setHiddenNav] = useState(null)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [popUpMessage, setPopUpMessage] = useState("")
   const measureRef = useRef(null)
   const busyRef = useRef(false)
 
   async function openPanel(type, event) {
     if (busyRef.current || panel) return
     busyRef.current = true
-    setErrorMessage("") 
+    setPopUpMessage("") 
 
     const origin = rectFromElement(event.currentTarget)
 
@@ -94,7 +94,7 @@ export default function App() {
   async function closePanel() {
     if (busyRef.current || !panel) return
     busyRef.current = true
-    setErrorMessage("")
+    setPopUpMessage("")
 
     const { origin } = panel
     setPanel((p) => ({ ...p, phase: 'closing' }))
@@ -159,8 +159,8 @@ export default function App() {
         showForm={showForm} 
         onBack={closePanel} 
         measureRef={measureRef}
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
+        popUpMessage={popUpMessage}
+        setPopUpMessage={setPopUpMessage}
       />
     </div>
   )
