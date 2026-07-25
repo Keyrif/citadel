@@ -256,34 +256,59 @@ export function WaterButton({ children, onClick, className = '', type = "button"
 
 function ErrorPopup({ errorMessage, setErrorMessage }) {
   const [phase, setPhase] = useState('closed')
-  const [bounds, setBounds] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
+  const [bounds, setBounds] = useState(null)
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
 
   useEffect(() => {
-    // Trigger the opening animation when an error occurs
-    if (errorMessage && phase === 'closed') {
-      setPhase('ripple')
-      setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
+    let isMounted = true;
 
-      const timer = setTimeout(() => {
+    async function triggerPopup() {
+      if (errorMessage && phase === 'closed') {
+        // Start exactly in the center, with a small initial size (like a droplet)
+        const startBounds = { x: window.innerWidth / 2 - 30, y: window.innerHeight / 2 - 30, w: 60, h: 60, r: 30 }
+        setBounds(startBounds)
+        setPhase('press')
+
+        await wait(TIMING.press)
+        if (!isMounted) return
+        setPhase('ripple')
+
+        await wait(TIMING.ripple)
+        if (!isMounted) return
+
+        const dest = panelTargetRect(320) // Target height for the error
+        setPhase('expand')
+        
+        // Double rAF ensures the browser paints the 'expand' phase CSS 
+        // before we apply the bounds, triggering the smooth grow effect
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (isMounted) setBounds(dest)
+          })
+        })
+
+        await wait(TIMING.expand)
+        if (!isMounted) return
         setPhase('open')
-        setBounds(panelTargetRect(260)) // 260px height is ideal for the error text & button
-      }, TIMING.ripple)
-
-      return () => clearTimeout(timer)
+      }
     }
-  }, [errorMessage, phase])
 
-  const handleClose = () => {
-    // Trigger the exact same closing animation as the main panels
+    triggerPopup()
+
+    return () => { isMounted = false }
+  }, [errorMessage])
+
+  const handleClose = async () => {
     setPhase('closing')
-    setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
-    
-    setTimeout(() => {
-      setPhase('closed')
-      setErrorMessage('') // Clear the error state to reset
-    }, TIMING.expand)
+
+    await wait(150)
+    // Shrink back to the center droplet size
+    setBounds({ x: window.innerWidth / 2 - 30, y: window.innerHeight / 2 - 30, w: 60, h: 60, r: 30 })
+
+    await wait(TIMING.expand)
+    setPhase('closed')
+    setErrorMessage('') // Clears the error so it can trigger again next time
   }
 
   if (phase === 'closed' && !errorMessage) return null
@@ -295,14 +320,14 @@ function ErrorPopup({ errorMessage, setErrorMessage }) {
     <div
       ref={ref}
       className={`fluid-surface phase-${phase} is-form`}
-      style={{
+      style={bounds ? {
         left: bounds.x,
         top: bounds.y,
         width: bounds.w,
         height: bounds.h,
         borderRadius: bounds.r,
-        zIndex: 50 // Ensures the error pops up on top of the AuthMenu
-      }}
+        zIndex: 9999, // Guarantees it renders over the AuthMenu
+      } : { display: 'none' }}
     >
       <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
 
@@ -316,14 +341,12 @@ function ErrorPopup({ errorMessage, setErrorMessage }) {
 
       <div className="fluid-surface__body">
         <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
-          <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`}>
-            {/* Title ERROR styled to stand out */}
+          <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`} onSubmit={(e) => e.preventDefault()}>
             <h1 style={{ color: '#ff6b6b', marginBottom: '8px' }}>ERROR</h1>
             <p className="glass-subtitle" style={{ color: '#ffb3b3', marginBottom: '24px' }}>
               {errorMessage}
             </p>
-            {/* The close button using your identical WaterButton component */}
-            <WaterButton onClick={handleClose}>
+            <WaterButton type="button" onClick={handleClose}>
               Close
             </WaterButton>
           </form>
@@ -361,7 +384,7 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
           setErrorMessage(data.detail);
         }
       } catch (error) {
-        setErrorMessage("ERROR: Could not connect to API.");
+        setErrorMessage("Could not connect to API.");
       }
     } else {
       console.log("Login endpoint not connected yet!");
