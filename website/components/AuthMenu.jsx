@@ -47,11 +47,11 @@ export function wait(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms))
 }
 
-function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
+function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
+    setPopUpMessage("");
 
     const formData = new FormData(e.target);
     const payload = {
@@ -70,15 +70,21 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
       const data = await response.json();
 
       if (response.ok) {
-        setErrorMessage(data.message || `${config.label} successful!`); 
+        setPopUpMessage({ 
+          text: data.message || `${config.label} successful!`, 
+          type: "success" 
+        });
       } else {
         const errorMsg = Array.isArray(data.detail) 
           ? data.detail.map(err => err.msg).join(", ") 
           : data.detail;
-        setErrorMessage(errorMsg);
+        setPopUpMessage({
+          text: errorMsg, 
+          type: "error"
+        });
       }
     } catch (error) {
-      setErrorMessage("Could not connect to API.");
+      setPopUpMessage("Could not connect to API.");
     }
   };
 
@@ -104,7 +110,7 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
     </form>
   )
 }
-function FluidSurface({ panel, bounds, onBack, showForm, errorMessage, setErrorMessage }) {
+function FluidSurface({ panel, bounds, onBack, showForm, popUpmessage, setPopUpMessage }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
   const config = PANEL_CONFIG[panel.type]
@@ -144,8 +150,8 @@ function FluidSurface({ panel, bounds, onBack, showForm, errorMessage, setErrorM
             <AuthForm 
               config={config} 
               showFields={panel.phase === 'open'} 
-              errorMessage={errorMessage}      
-              setErrorMessage={setErrorMessage}  
+              popUpmessage={popUpmessage}      
+              setPopUpMessage={setPopUpMessage}  
             />
           </div>
         )}
@@ -164,7 +170,7 @@ function MeasurePanel({ type, measureRef }) {
   )
 }
 
-export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, errorMessage, setErrorMessage }) {
+export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpmessage, setPopUpMessage }) {
   if (!panel) return null;
 
   return (
@@ -179,14 +185,14 @@ export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, errorMes
           bounds={bounds}
           showForm={showForm}
           onBack={onBack}
-          errorMessage={errorMessage}      
-          setErrorMessage={setErrorMessage}  
+          popUpmessage={popUpmessage}      
+          setPopUpMessage={setPopUpMessage}  
         />
       )}
 
       <PopUp 
-        errorMessage={errorMessage} 
-        setErrorMessage={setErrorMessage} 
+        popUpmessage={popUpmessage} 
+        setPopUpMessage={setPopUpMessage} 
       />
     </>
   )

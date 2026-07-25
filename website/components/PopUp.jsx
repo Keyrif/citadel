@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { panelTargetRect, wait, TIMING } from './AuthMenu';
 import { useWaterSurface, Button } from './Button';
 
-export function PopUp({ errorMessage, setErrorMessage }) {
+export function PopUp({ popUpmessage, setPopUpMessage }) {
+  const popUpMessageText = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.text : message;
+  const popUpMessageType = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.type : 'error';
+
   const [phase, setPhase] = useState('closed')
   const [bounds, setBounds] = useState(null)
   const ref = useRef(null)
@@ -12,7 +15,7 @@ export function PopUp({ errorMessage, setErrorMessage }) {
     let isMounted = true;
 
     async function triggerPopup() {
-      if (errorMessage && phase === 'closed') {
+      if (popUpMessageText && phase === 'closed') {
         const startBounds = { x: window.innerWidth / 2 - 30, y: window.innerHeight / 2 - 30, w: 60, h: 60, r: 30 }
         setBounds(startBounds)
         setPhase('press')
@@ -42,7 +45,7 @@ export function PopUp({ errorMessage, setErrorMessage }) {
     triggerPopup()
 
     return () => { isMounted = false }
-  }, [errorMessage])
+  }, [popUpMessageText])
 
   const handleClose = async () => {
     setPhase('closing')
@@ -52,10 +55,10 @@ export function PopUp({ errorMessage, setErrorMessage }) {
 
     await wait(TIMING.expand)
     setPhase('closed')
-    setErrorMessage('')
+    setpopUpMessage('') 
   }
 
-  if (phase === 'closed' && !errorMessage) return null
+  if (phase === 'closed' && !popUpMessageText) return null
 
   const splashes = phase === 'ripple' || phase === 'press'
   const isClosing = phase === 'closing'
@@ -93,10 +96,15 @@ export function PopUp({ errorMessage, setErrorMessage }) {
         <div className="fluid-surface__body">
           <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
             <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`} onSubmit={(e) => e.preventDefault()}>
-              <h1 className="error-title">ERROR</h1>
-              <p className="glass-subtitle error-subtitle">
-                {errorMessage}
+              
+              <h1 className={messageType === 'success' ? "success-title" : "error-title"}>
+                {messageType === 'success' ? 'SUCCESS' : 'ERROR'}
+              </h1>
+              
+              <p className={`glass-subtitle ${messageType === 'success' ? "success-subtitle" : "error-subtitle"}`}>
+                {messageText}
               </p>
+              
               <Button type="button" onClick={handleClose}>
                 Close
               </Button>
