@@ -545,7 +545,12 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   background-color: rgba(30, 40, 80, 0.4);
-  z-index: -1;
+  pointer-events: none;
+}
+
+.glass-form {
+  position: relative;
+  z-index: 1;
 }
 
 .glass-form h1.error-title {
