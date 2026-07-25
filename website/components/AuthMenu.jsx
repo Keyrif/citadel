@@ -9,14 +9,14 @@ export const PANEL_CONFIG = {
     title: 'Login',
     subtitle: 'Welcome back.',
     submit: 'Sign in',
-    endpoint: 'http://127.0.0.1:8000/login',
+    endpoint: '/login',
   },
   signup: {
     label: 'Create Account',
     title: 'Create Account',
     subtitle: 'Pick a username and password.',
     submit: 'Create account',
-    endpoint: 'http://127.0.0.1:8000/register',
+    endpoint: '/register',
   },
 }
 

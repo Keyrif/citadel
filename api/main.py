@@ -8,7 +8,7 @@ dsn_oracle = oracledb.makedsn("127.0.0.1", 1521, sid="xe")
 
 class UserRegistration(BaseModel):
     username: str
-    password: str = Field(..., minimum_length=6)
+    password: str = Field(..., min_length=6)
 
 @app.post("/register")
 def register(user: UserRegistration):
