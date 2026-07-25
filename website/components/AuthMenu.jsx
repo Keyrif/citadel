@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { PopUp } from './Popup'; 
+import { PopUp } from './PopUp'; 
 import { BackButton } from './BackButton';
 import { useWaterSurface, Button } from './Button';
 
