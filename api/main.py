@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import oracledb, os
-oracledb.init_oracle_client(lib_dir="/home/azureuser/oracle/instantclient_19_21")
+oracledb.init_oracle_client()
 app = FastAPI()
 
 class UserRegistration(BaseModel):
