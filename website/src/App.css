@@ -536,8 +536,8 @@
 .error-popup-surface {
   z-index: 9999;
   background: rgba(30, 42, 75, 0.25) !important;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
 .error-popup-surface::before {
