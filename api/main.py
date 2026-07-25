@@ -53,7 +53,7 @@ def login(user: UserLogin):
         cursor = connection.cursor()
 
         cursor.execute(
-            "SELECT USERNAME, STATUS FROM accounts" \
+            "SELECT USERNAME, STATUS FROM accounts " \
             "WHERE USERNAME = :username AND PASSWD = :password",
             {"username": user.username, "password": user.password}
         )
