@@ -53,18 +53,25 @@ def login(user: UserLogin):
         cursor = connection.cursor()
 
         cursor.execute(
-            "SELECT COUNT(*) FROM accounts WHERE USERNAME = :username AND PASSWD = :password",
-            [user.username, user.password]
+            "SELECT USERNAME, STATUS FROM accounts" \
+            "WHERE USERNAME = :username AND PASSWD = :password",
+            {"username": user.username, "password": user.password}
         )
-        count = cursor.fetchone()[0]
+        row = cursor.fetchone()
 
         cursor.close()
         connection.close()
 
-        if count == 0:
+        if not row:
             raise HTTPException(status_code=400, detail="Password incorrect or username not found!")
 
-        return {"message": "Logged in successfully!"}
+        return {
+            "message": "Logged in successfully!",
+            "userData": {
+                "username": row[0],
+                "status": row[1]
+            }
+        }
     except HTTPException as he:
         raise he
     except Exception as e:

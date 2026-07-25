@@ -74,6 +74,12 @@ function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
           text: data.message || `${config.label} successful!`, 
           type: "success" 
         });
+        if (data.userData && setLoggedInUser) {
+          setTimeout(() => {
+            setLoggedInUser(data.userData);
+          }, 1500);
+        }
+      }
       } else {
         const errorMsg = Array.isArray(data.detail) 
           ? data.detail.map(err => err.msg).join(", ") 
