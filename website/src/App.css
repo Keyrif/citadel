@@ -523,7 +523,7 @@
 .error-overlay {
   position: fixed;
   inset: 0;
-  background-color: transparent;
+  background-color: rgba(30, 40, 80, 0.4);
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
@@ -533,31 +533,32 @@
   opacity: 0;
 }
 
-/* 1. The Parent (like the tutorial's .outer): 
-      Add the background color here and remove the buggy nested filter */
 .error-popup-surface {
   z-index: 9999;
-  background: rgba(30, 42, 75, 0.75) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  background: rgba(30, 42, 75, 0.25) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
-/* 2. The Pseudo-element: 
-      Place the backdrop filter here with absolute positioning */
-.error-popup-surface::after {
+.error-popup-surface::before {
   content: '';
+  display: block;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
-  backdrop-filter: blur(28px) saturate(140%);
-  z-index: -1; /* Positions your backdrop behind your elements */
+  
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  
+  background-color: rgba(30, 40, 80, 0.4);
+  pointer-events: none;
 }
 
-/* Text Overrides */
+.glass-form {
+  position: relative;
+  z-index: 10;
+}
+
 .glass-form h1.error-title {
   color: #ff6b6b;
   margin-bottom: 8px;
