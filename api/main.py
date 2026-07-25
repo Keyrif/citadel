@@ -32,7 +32,7 @@ def register(user: UserRegistration):
         error_string = str(e)
 
         # account already exists
-        if "ORA-00001" in error_str:
+        if "ORA-00001" in error_string:
             raise HTTPException(status_code=400, detail="This username is already taken!")
         raise HTTPException(status_code=500, detail="An internal server error occured!")
 
