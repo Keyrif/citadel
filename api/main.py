@@ -29,5 +29,10 @@ def register(user: UserRegistration):
 
         return {"status": "success"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_string = str(e)
+
+        # account already exists
+        if "ORA-00001" in error_str:
+            raise HTTPException(status_code=400, detail="This username is already taken!")
+        raise HTTPException(status_code=500, detail="An internal server error occured!")
 
