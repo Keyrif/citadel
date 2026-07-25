@@ -10,7 +10,7 @@ class UserRegistration(BaseModel):
 @app.post("/register")
 def register(user: UserRegistration):
     try:
-        dsn_oracle = oracledb.makedsn("keyrif.me", 1521, sid="xe")
+        dsn_oracle = oracledb.makedsn("127.0.0.1", 1521, sid="xe")
 
         connection = oracledb.connect(
             user="citadel",
