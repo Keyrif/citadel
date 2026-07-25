@@ -107,85 +107,6 @@ export function useWaterSurface(ref) {
       frameRef.current = requestAnimationFrame(draw)
     }
 
-function ErrorPopup({ errorMessage, setErrorMessage }) {
-  const [phase, setPhase] = useState('closed')
-  const [bounds, setBounds] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
-  const ref = useRef(null)
-  const canvasRef = useWaterSurface(ref)
-
-  useEffect(() => {
-    // Trigger the opening animation when an error occurs
-    if (errorMessage && phase === 'closed') {
-      setPhase('ripple')
-      setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
-
-      const timer = setTimeout(() => {
-        setPhase('open')
-        setBounds(panelTargetRect(260)) // 260px height is ideal for the error text & button
-      }, TIMING.ripple)
-
-      return () => clearTimeout(timer)
-    }
-  }, [errorMessage, phase])
-
-  const handleClose = () => {
-    // Trigger the exact same closing animation as the main panels
-    setPhase('closing')
-    setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
-    
-    setTimeout(() => {
-      setPhase('closed')
-      setErrorMessage('') // Clear the error state to reset
-    }, TIMING.expand)
-  }
-
-  if (phase === 'closed' && !errorMessage) return null
-
-  const splashes = phase === 'ripple' || phase === 'press'
-  const isClosing = phase === 'closing'
-
-  return (
-    <div
-      ref={ref}
-      className={`fluid-surface phase-${phase} is-form`}
-      style={{
-        left: bounds.x,
-        top: bounds.y,
-        width: bounds.w,
-        height: bounds.h,
-        borderRadius: bounds.r,
-        zIndex: 50 // Ensures the error pops up on top of the AuthMenu
-      }}
-    >
-      <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
-
-      {splashes && (
-        <div className="liquid-splashes" aria-hidden="true">
-          <span className="liquid-splash" />
-          <span className="liquid-splash liquid-splash--delay" />
-          <span className="liquid-splash liquid-splash--delay2" />
-        </div>
-      )}
-
-      <div className="fluid-surface__body">
-        <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
-          <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`}>
-            {/* Title ERROR styled to stand out */}
-            <h1 style={{ color: '#ff6b6b', marginBottom: '8px' }}>ERROR</h1>
-            <p className="glass-subtitle" style={{ color: '#ffb3b3', marginBottom: '24px' }}>
-              {errorMessage}
-            </p>
-            {/* The close button using your identical WaterButton component */}
-            <WaterButton onClick={handleClose}>
-              Close
-            </WaterButton>
-          </form>
-        </div>
-      </div>
-    </div>
-  )
-}
-
     function localPoint(event) {
       const rect = surface.getBoundingClientRect()
       return {
@@ -330,6 +251,85 @@ export function WaterButton({ children, onClick, className = '', type = "button"
       <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
       <span className="water-btn__label">{children}</span>
     </button>
+  )
+}
+
+function ErrorPopup({ errorMessage, setErrorMessage }) {
+  const [phase, setPhase] = useState('closed')
+  const [bounds, setBounds] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
+  const ref = useRef(null)
+  const canvasRef = useWaterSurface(ref)
+
+  useEffect(() => {
+    // Trigger the opening animation when an error occurs
+    if (errorMessage && phase === 'closed') {
+      setPhase('ripple')
+      setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
+
+      const timer = setTimeout(() => {
+        setPhase('open')
+        setBounds(panelTargetRect(260)) // 260px height is ideal for the error text & button
+      }, TIMING.ripple)
+
+      return () => clearTimeout(timer)
+    }
+  }, [errorMessage, phase])
+
+  const handleClose = () => {
+    // Trigger the exact same closing animation as the main panels
+    setPhase('closing')
+    setBounds({ x: window.innerWidth / 2, y: window.innerHeight / 2, w: 0, h: 0, r: 28 })
+    
+    setTimeout(() => {
+      setPhase('closed')
+      setErrorMessage('') // Clear the error state to reset
+    }, TIMING.expand)
+  }
+
+  if (phase === 'closed' && !errorMessage) return null
+
+  const splashes = phase === 'ripple' || phase === 'press'
+  const isClosing = phase === 'closing'
+
+  return (
+    <div
+      ref={ref}
+      className={`fluid-surface phase-${phase} is-form`}
+      style={{
+        left: bounds.x,
+        top: bounds.y,
+        width: bounds.w,
+        height: bounds.h,
+        borderRadius: bounds.r,
+        zIndex: 50 // Ensures the error pops up on top of the AuthMenu
+      }}
+    >
+      <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
+
+      {splashes && (
+        <div className="liquid-splashes" aria-hidden="true">
+          <span className="liquid-splash" />
+          <span className="liquid-splash liquid-splash--delay" />
+          <span className="liquid-splash liquid-splash--delay2" />
+        </div>
+      )}
+
+      <div className="fluid-surface__body">
+        <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
+          <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`}>
+            {/* Title ERROR styled to stand out */}
+            <h1 style={{ color: '#ff6b6b', marginBottom: '8px' }}>ERROR</h1>
+            <p className="glass-subtitle" style={{ color: '#ffb3b3', marginBottom: '24px' }}>
+              {errorMessage}
+            </p>
+            {/* The close button using your identical WaterButton component */}
+            <WaterButton onClick={handleClose}>
+              Close
+            </WaterButton>
+          </form>
+        </div>
+      </div>
+    </div>
   )
 }
 
