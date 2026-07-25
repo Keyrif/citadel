@@ -520,6 +520,51 @@
   transform: scale(1.5);
 }
 
+/* --- ERROR POPUP STYLES --- */
+
+/* Dark overlay behind the popup */
+/* Invisible overlay behind the popup to handle click-to-close */
+.error-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: transparent; /* Changed from rgba(0, 0, 0, 0.65) */
+  z-index: 9998;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.error-overlay.is-closing {
+  opacity: 0;
+}
+
+/* Base surface overrides */
+.error-popup-surface {
+  z-index: 9999;
+}
+
+/* Pseudo-element to bypass nested backdrop-filter bug */
+.error-popup-surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(30, 40, 80, 0.4);
+  z-index: -1;
+}
+
+/* Text Overrides */
+.glass-form h1.error-title {
+  color: #ff6b6b;
+  margin-bottom: 8px;
+}
+
+.glass-form p.error-subtitle {
+  color: #ffb3b3;
+  margin-bottom: 24px;
+}
+
 @media (max-width: 480px) {
   .github-btn {
     bottom: 16px;

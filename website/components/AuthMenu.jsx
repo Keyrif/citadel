@@ -316,37 +316,24 @@ function ErrorPopup({ errorMessage, setErrorMessage }) {
   const splashes = phase === 'ripple' || phase === 'press'
   const isClosing = phase === 'closing'
 
-return (
+  return (
     <>
-      {/* Dark overlay behind the popup to hide the form */}
       {phase !== 'closed' && (
         <div 
-          style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.65)',
-            zIndex: 9998,
-            opacity: isClosing ? 0 : 1,
-            transition: 'opacity 0.2s ease-in-out'
-          }}
+          className={`error-overlay ${isClosing ? 'is-closing' : ''}`}
           onClick={handleClose}
         />
       )}
 
       <div
         ref={ref}
-        className={`fluid-surface phase-${phase} is-form`}
+        className={`fluid-surface error-popup-surface phase-${phase} is-form`}
         style={bounds ? {
           left: bounds.x,
           top: bounds.y,
           width: bounds.w,
           height: bounds.h,
-          borderRadius: bounds.r,
-          zIndex: 9999,
-          // Forces solidity to stop text bleed, while keeping the glass aesthetic
-          backgroundColor: 'rgba(30, 40, 80, 0.98)', 
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)'
+          borderRadius: bounds.r
         } : { display: 'none' }}
       >
         <canvas ref={canvasRef} className="water-btn__canvas" aria-hidden="true" />
@@ -362,8 +349,8 @@ return (
         <div className="fluid-surface__body">
           <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
             <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`} onSubmit={(e) => e.preventDefault()}>
-              <h1 style={{ color: '#ff6b6b', marginBottom: '8px' }}>ERROR</h1>
-              <p className="glass-subtitle" style={{ color: '#ffb3b3', marginBottom: '24px' }}>
+              <h1 className="error-title">ERROR</h1>
+              <p className="glass-subtitle error-subtitle">
                 {errorMessage}
               </p>
               <WaterButton type="button" onClick={handleClose}>
