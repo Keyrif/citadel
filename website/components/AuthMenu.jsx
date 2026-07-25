@@ -110,7 +110,7 @@ function AuthForm({ config, showFields, popUpMessage, setPopUpMessage }) {
     </form>
   )
 }
-function FluidSurface({ panel, bounds, onBack, showForm, popUpmessage, setPopUpMessage }) {
+function FluidSurface({ panel, bounds, onBack, showForm, popUpMessage, setPopUpMessage }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
   const config = PANEL_CONFIG[panel.type]
@@ -150,7 +150,7 @@ function FluidSurface({ panel, bounds, onBack, showForm, popUpmessage, setPopUpM
             <AuthForm 
               config={config} 
               showFields={panel.phase === 'open'} 
-              popUpmessage={popUpmessage}      
+              popUpMessage={popUpMessage}      
               setPopUpMessage={setPopUpMessage}  
             />
           </div>
@@ -170,7 +170,7 @@ function MeasurePanel({ type, measureRef }) {
   )
 }
 
-export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpmessage, setPopUpMessage }) {
+export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpMessage, setPopUpMessage }) {
   if (!panel) return null;
 
   return (
@@ -185,13 +185,13 @@ export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, popUpmes
           bounds={bounds}
           showForm={showForm}
           onBack={onBack}
-          popUpmessage={popUpmessage}      
+          popUpMessage={popUpMessage}      
           setPopUpMessage={setPopUpMessage}  
         />
       )}
 
       <PopUp 
-        popUpmessage={popUpmessage} 
+        popUpMessage={popUpMessage} 
         setPopUpMessage={setPopUpMessage} 
       />
     </>

@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { panelTargetRect, wait, TIMING } from './AuthMenu';
 import { useWaterSurface, Button } from './Button';
 
-export function PopUp({ popUpmessage, setPopUpMessage }) {
-  const popUpMessageText = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.text : message;
-  const popUpMessageType = typeof popUpmessage === 'object' && popUpmessage !== null ? popUpmessage.type : 'error';
+export function PopUp({ popUpMessage, setPopUpMessage }) {
+  const popUpMessageText = typeof popUpMessage === 'object' && popUpMessage !== null ? popUpMessage.text : popUpMessage;
+  const popUpMessageType = typeof popUpMessage === 'object' && popUpMessage !== null ? popUpMessage.type : 'error';
 
   const [phase, setPhase] = useState('closed')
   const [bounds, setBounds] = useState(null)
@@ -55,7 +55,7 @@ export function PopUp({ popUpmessage, setPopUpMessage }) {
 
     await wait(TIMING.expand)
     setPhase('closed')
-    setpopUpMessage('') 
+    setPopUpMessage('') 
   }
 
   if (phase === 'closed' && !popUpMessageText) return null
