@@ -407,6 +407,10 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
       <h1>{config.title}</h1>
       <p className="glass-subtitle">{config.subtitle}</p>
       <label>
+        Username
+        <input type="text" name="username" autoComplete="username" required />
+      </label>
+      <label>
         Password
         <input 
           type="password" 
@@ -415,10 +419,6 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
           autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} 
           required 
         />
-      </label>
-      <label>
-        Password
-        <input type="password" name="password" autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} required />
       </label>
       <WaterButton type="submit">{config.submit}</WaterButton>
     </form>
