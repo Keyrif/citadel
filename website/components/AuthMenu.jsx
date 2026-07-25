@@ -254,10 +254,11 @@ export function WaterButton({ children, onClick, className = '', type = "button"
   )
 }
 
-function AuthForm({ config, showFields }) {
-  
+function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
+
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
 
     const formData = new FormData(e.target);
     const payload = {
@@ -278,10 +279,10 @@ function AuthForm({ config, showFields }) {
         if (response.ok) {
           alert("Account created successfully!");
         } else {
-          alert("Failed: " + data.detail);
+          setErrorMessage(data.detail);
         }
       } catch (error) {
-        alert("ERROR: Could not connect to API.");
+        setErrorMessage("ERROR: Could not connect to API.");
       }
     } else {
       console.log("Login endpoint not connected yet!");
@@ -304,7 +305,7 @@ function AuthForm({ config, showFields }) {
     </form>
   )
 }
-function FluidSurface({ panel, bounds, onBack, showForm }) {
+function FluidSurface({ panel, bounds, onBack, showForm, errorMessage, setErrorMessage }) {
   const ref = useRef(null)
   const canvasRef = useWaterSurface(ref)
   const config = PANEL_CONFIG[panel.type]
@@ -338,10 +339,15 @@ function FluidSurface({ panel, bounds, onBack, showForm }) {
           {config.label}
         </span>
 
-        {showForm && (
+{showForm && (
           <div className={`fluid-form ${panel.phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
             {panel.phase === 'open' && <BackButton onClick={onBack} />}
-            <AuthForm config={config} showFields={panel.phase === 'open'} />
+            <AuthForm 
+              config={config} 
+              showFields={panel.phase === 'open'} 
+              errorMessage={errorMessage}      
+              setErrorMessage={setErrorMessage}  
+            />
           </div>
         )}
       </div>
@@ -359,7 +365,7 @@ function MeasurePanel({ type, measureRef }) {
   )
 }
 
-export function AuthMenu({ panel, bounds, showForm, onBack, measureRef }) {
+export function AuthMenu({ panel, bounds, showForm, onBack, measureRef, errorMessage, setErrorMessage }) {
   if (!panel) return null;
 
   return (
@@ -374,6 +380,8 @@ export function AuthMenu({ panel, bounds, showForm, onBack, measureRef }) {
           bounds={bounds}
           showForm={showForm}
           onBack={onBack}
+          errorMessage={errorMessage}      
+          setErrorMessage={setErrorMessage}  
         />
       )}
     </>
