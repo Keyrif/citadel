@@ -293,6 +293,11 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
     <form className={`glass-form ${showFields ? 'is-visible' : ''}`} onSubmit={handleAuthSubmit}>
       <h1>{config.title}</h1>
       <p className="glass-subtitle">{config.subtitle}</p>
+      {errorMessage && (
+        <div className="text-red-400 text-sm bg-red-950/50 border border-red-800 p-2 rounded mb-4 text-center">
+          {errorMessage}
+       </div>
+      )}
       <label>
         Username
         <input type="text" name="username" autoComplete="username" required />
