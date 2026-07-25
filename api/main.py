@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import oracledb, os
 oracledb.init_oracle_client()
 app = FastAPI()
 
 class UserRegistration(BaseModel):
     username: str
-    password: str
+    password: str = Field(..., minimum_length=8)
 
 @app.post("/register")
 def register(user: UserRegistration):

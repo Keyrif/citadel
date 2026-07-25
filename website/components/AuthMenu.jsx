@@ -389,7 +389,10 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
         if (response.ok) {
           alert("Account created successfully!");
         } else {
-          setErrorMessage(data.detail);
+          const errorMsg = Array.isArray(data.detail) 
+            ? data.detail.map(err => err.msg).join(", ") 
+            : data.detail;
+          setErrorMessage(errorMsg);
         }
       } catch (error) {
         setErrorMessage("Could not connect to API.");
@@ -404,8 +407,14 @@ function AuthForm({ config, showFields, errorMessage, setErrorMessage }) {
       <h1>{config.title}</h1>
       <p className="glass-subtitle">{config.subtitle}</p>
       <label>
-        Username
-        <input type="text" name="username" autoComplete="username" required />
+        Password
+        <input 
+          type="password" 
+          name="password" 
+          minLength="8" 
+          autoComplete={config.title === 'Login' ? 'current-password' : 'new-password'} 
+          required 
+        />
       </label>
       <label>
         Password
