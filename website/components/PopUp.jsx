@@ -97,12 +97,12 @@ export function PopUp({ popUpmessage, setPopUpMessage }) {
           <div className={`fluid-form ${phase === 'open' ? 'is-visible' : ''} ${isClosing ? 'is-leaving' : ''}`}>
             <form className={`glass-form ${phase === 'open' ? 'is-visible' : ''}`} onSubmit={(e) => e.preventDefault()}>
               
-              <h1 className={messageType === 'success' ? "success-title" : "error-title"}>
-                {messageType === 'success' ? 'SUCCESS' : 'ERROR'}
+              <h1 className={popUpMessageType === 'success' ? "success-title" : "error-title"}>
+                {popUpMessageType === 'success' ? 'SUCCESS' : 'ERROR'}
               </h1>
               
               <p className={`glass-subtitle ${messageType === 'success' ? "success-subtitle" : "error-subtitle"}`}>
-                {messageText}
+                {popUpMessageText}
               </p>
               
               <Button type="button" onClick={handleClose}>
